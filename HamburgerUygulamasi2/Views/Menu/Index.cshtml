@@ -1,4 +1,7 @@
-﻿@model IEnumerable<HamburgerUygulaması.Entity.Menu>
+﻿@using HamburgerUygulamasi2.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<HamburgerUygulaması.Entity.Menu>
+@inject UserManager<User> _userManager
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +9,13 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -22,20 +29,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MenuAdi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MenuFiyati)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MenuAdi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MenuFiyati)
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>

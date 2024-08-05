@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HamburgerUygulamasi2.Areas.Identity.Data;
 using HamburgerUygulaması.Entity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HamburgerUygulamasi2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class MenuController : Controller
     {
         private readonly HamburgerUygulamasiContext _context;
@@ -20,6 +22,7 @@ namespace HamburgerUygulamasi2.Controllers
         }
 
         // GET: Menu
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Menu.ToListAsync());
