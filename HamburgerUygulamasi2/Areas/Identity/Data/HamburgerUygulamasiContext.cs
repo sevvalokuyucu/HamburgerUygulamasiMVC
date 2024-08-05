@@ -15,7 +15,6 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
 
     public DbSet<Siparis> Siparis { get; set; }
     public DbSet<SiparisMalzeme> SiparisMalzeme { get; set; }
-    public DbSet<SiparisMenu> SiparisMenu  { get; set; }
     public DbSet<Menu> Menu { get; set; }
     public DbSet<EkstraMalzeme> EkstraMalzeme { get; set; }
 

@@ -4,6 +4,7 @@ using HamburgerUygulamasi2.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HamburgerUygulamasi2.Migrations
 {
     [DbContext(typeof(HamburgerUygulamasiContext))]
-    partial class HamburgerUygulamasiContextModelSnapshot : ModelSnapshot
+    [Migration("20240805113011_second")]
+    partial class second
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,7 +150,12 @@ namespace HamburgerUygulamasi2.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("SiparisId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SiparisId");
 
                     b.ToTable("Menu");
                 });
@@ -207,6 +215,35 @@ namespace HamburgerUygulamasi2.Migrations
                     b.HasIndex("SiparisId");
 
                     b.ToTable("SiparisMalzeme");
+                });
+
+            modelBuilder.Entity("HamburgerUygulaması.Entity.SiparisMenu", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SiparisId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuId");
+
+                    b.HasIndex("SiparisId");
+
+                    b.ToTable("SiparisMenu");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -353,6 +390,13 @@ namespace HamburgerUygulamasi2.Migrations
                         .HasForeignKey("SiparisId");
                 });
 
+            modelBuilder.Entity("HamburgerUygulaması.Entity.Menu", b =>
+                {
+                    b.HasOne("HamburgerUygulaması.Entity.Siparis", null)
+                        .WithMany("Menuler")
+                        .HasForeignKey("SiparisId");
+                });
+
             modelBuilder.Entity("HamburgerUygulaması.Entity.Siparis", b =>
                 {
                     b.HasOne("HamburgerUygulamasi2.Areas.Identity.Data.User", "User")
@@ -379,6 +423,25 @@ namespace HamburgerUygulamasi2.Migrations
                         .IsRequired();
 
                     b.Navigation("EkstraMalzeme");
+
+                    b.Navigation("Siparis");
+                });
+
+            modelBuilder.Entity("HamburgerUygulaması.Entity.SiparisMenu", b =>
+                {
+                    b.HasOne("HamburgerUygulaması.Entity.Menu", "Menu")
+                        .WithMany("SiparisMenu")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HamburgerUygulaması.Entity.Siparis", "Siparis")
+                        .WithMany()
+                        .HasForeignKey("SiparisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Menu");
 
                     b.Navigation("Siparis");
                 });
@@ -444,9 +507,16 @@ namespace HamburgerUygulamasi2.Migrations
                     b.Navigation("SiparisMalzeme");
                 });
 
+            modelBuilder.Entity("HamburgerUygulaması.Entity.Menu", b =>
+                {
+                    b.Navigation("SiparisMenu");
+                });
+
             modelBuilder.Entity("HamburgerUygulaması.Entity.Siparis", b =>
                 {
                     b.Navigation("EkstraMalzemeler");
+
+                    b.Navigation("Menuler");
                 });
 #pragma warning restore 612, 618
         }
