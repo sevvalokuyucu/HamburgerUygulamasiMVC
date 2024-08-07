@@ -6,7 +6,7 @@ var connectionString = builder.Configuration.GetConnectionString("HamburgerUygul
 
 builder.Services.AddDbContext<HamburgerUygulamasiContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<HamburgerUygulamasiContext>();
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<HamburgerUygulamasiContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
