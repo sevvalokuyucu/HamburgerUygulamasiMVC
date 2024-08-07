@@ -147,7 +147,12 @@ namespace HamburgerUygulamasi2.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("SiparisId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SiparisId");
 
                     b.ToTable("Menu");
                 });
@@ -165,9 +170,6 @@ namespace HamburgerUygulamasi2.Migrations
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("SiparisAdedi")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -353,6 +355,13 @@ namespace HamburgerUygulamasi2.Migrations
                         .HasForeignKey("SiparisId");
                 });
 
+            modelBuilder.Entity("HamburgerUygulaması.Entity.Menu", b =>
+                {
+                    b.HasOne("HamburgerUygulaması.Entity.Siparis", null)
+                        .WithMany("SiparisMenuleri")
+                        .HasForeignKey("SiparisId");
+                });
+
             modelBuilder.Entity("HamburgerUygulaması.Entity.Siparis", b =>
                 {
                     b.HasOne("HamburgerUygulamasi2.Areas.Identity.Data.User", "User")
@@ -447,6 +456,8 @@ namespace HamburgerUygulamasi2.Migrations
             modelBuilder.Entity("HamburgerUygulaması.Entity.Siparis", b =>
                 {
                     b.Navigation("EkstraMalzemeler");
+
+                    b.Navigation("SiparisMenuleri");
                 });
 #pragma warning restore 612, 618
         }

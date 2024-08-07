@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HamburgerUygulamasi2.Migrations
 {
     /// <inheritdoc />
-    public partial class ilk : Migration
+    public partial class m1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,8 +30,8 @@ namespace HamburgerUygulamasi2.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Ad = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Soyad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -164,7 +164,6 @@ namespace HamburgerUygulamasi2.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SiparisAdedi = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -252,34 +251,6 @@ namespace HamburgerUygulamasi2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "SiparisMenu",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MenuId = table.Column<int>(type: "int", nullable: false),
-                    SiparisId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SiparisMenu", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SiparisMenu_Menu_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "Menu",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SiparisMenu_Siparis_SiparisId",
-                        column: x => x.SiparisId,
-                        principalTable: "Siparis",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -343,16 +314,6 @@ namespace HamburgerUygulamasi2.Migrations
                 name: "IX_SiparisMalzeme_SiparisId",
                 table: "SiparisMalzeme",
                 column: "SiparisId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SiparisMenu_MenuId",
-                table: "SiparisMenu",
-                column: "MenuId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SiparisMenu_SiparisId",
-                table: "SiparisMenu",
-                column: "SiparisId");
         }
 
         /// <inheritdoc />
@@ -374,19 +335,16 @@ namespace HamburgerUygulamasi2.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "SiparisMalzeme");
+                name: "Menu");
 
             migrationBuilder.DropTable(
-                name: "SiparisMenu");
+                name: "SiparisMalzeme");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "EkstraMalzeme");
-
-            migrationBuilder.DropTable(
-                name: "Menu");
 
             migrationBuilder.DropTable(
                 name: "Siparis");

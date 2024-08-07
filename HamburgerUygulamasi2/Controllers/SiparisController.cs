@@ -7,28 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HamburgerUygulamasi2.Areas.Identity.Data;
 using HamburgerUygulaması.Entity;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HamburgerUygulamasi2.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class MenuController : Controller
+    public class SiparisController : Controller
     {
         private readonly HamburgerUygulamasiContext _context;
 
-        public MenuController(HamburgerUygulamasiContext context)
+        public SiparisController(HamburgerUygulamasiContext context)
         {
             _context = context;
         }
 
-        // GET: Menu
-        [AllowAnonymous]
+        // GET: Siparis
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Menu.ToListAsync());
+            var hamburgerUygulamasiContext = _context.Siparis.Include(s => s.User);
+            return View(await hamburgerUygulamasiContext.ToListAsync());
         }
 
-        // GET: Menu/Details/5
+        // GET: Siparis/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,39 +35,46 @@ namespace HamburgerUygulamasi2.Controllers
                 return NotFound();
             }
 
-            var menu = await _context.Menu
+            var siparis = await _context.Siparis
+                .Include(s => s.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (menu == null)
+            if (siparis == null)
             {
                 return NotFound();
             }
 
-            return View(menu);
+            return View(siparis);
         }
 
-        // GET: Menu/Create
+        // GET: Siparis/Create
         public IActionResult Create()
         {
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // POST: Menu/Create
+        // POST: Siparis/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MenuAdi,MenuFiyati")] Menu menu)
+        public async Task<IActionResult> Create([Bind("UserId, Id")] List<Menu> SecilenMenuler)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(menu);
+                Siparis siparis = new Siparis();
+                siparis.SiparisMenuleri = SecilenMenuler;
+                _context.Add(siparis);
+                ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", siparis.UserId);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+               
             }
-            return View(menu);
+            
+            return RedirectToAction("Index","Menu");
         }
 
-        // GET: Menu/Edit/5
+        // GET: Siparis/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +82,23 @@ namespace HamburgerUygulamasi2.Controllers
                 return NotFound();
             }
 
-            var menu = await _context.Menu.FindAsync(id);
-            if (menu == null)
+            var siparis = await _context.Siparis.FindAsync(id);
+            if (siparis == null)
             {
                 return NotFound();
             }
-            return View(menu);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", siparis.UserId);
+            return View(siparis);
         }
 
-        // POST: Menu/Edit/5
+        // POST: Siparis/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MenuAdi,MenuFiyati,ModifiedDate")] Menu menu)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Id,CreatedDate,ModifiedDate")] Siparis siparis)
         {
-            if (id != menu.Id)
+            if (id != siparis.Id)
             {
                 return NotFound();
             }
@@ -100,13 +107,12 @@ namespace HamburgerUygulamasi2.Controllers
             {
                 try
                 {
-                    menu.ModifiedDate = DateTime.Now;
-                    _context.Update(menu);
+                    _context.Update(siparis);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MenuExists(menu.Id))
+                    if (!SiparisExists(siparis.Id))
                     {
                         return NotFound();
                     }
@@ -117,10 +123,11 @@ namespace HamburgerUygulamasi2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(menu);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", siparis.UserId);
+            return View(siparis);
         }
 
-        // GET: Menu/Delete/5
+        // GET: Siparis/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -128,36 +135,35 @@ namespace HamburgerUygulamasi2.Controllers
                 return NotFound();
             }
 
-            var menu = await _context.Menu
+            var siparis = await _context.Siparis
+                .Include(s => s.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (menu == null)
+            if (siparis == null)
             {
                 return NotFound();
             }
 
-            return View(menu);
+            return View(siparis);
         }
 
-        // POST: Menu/Delete/5
+        // POST: Siparis/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var menu = await _context.Menu.FindAsync(id);
-            if (menu != null)
+            var siparis = await _context.Siparis.FindAsync(id);
+            if (siparis != null)
             {
-                _context.Menu.Remove(menu);
+                _context.Siparis.Remove(siparis);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MenuExists(int id)
+        private bool SiparisExists(int id)
         {
-            return _context.Menu.Any(e => e.Id == id);
+            return _context.Siparis.Any(e => e.Id == id);
         }
-
- 
     }
 }
