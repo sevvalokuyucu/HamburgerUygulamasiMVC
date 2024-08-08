@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using HamburgerUygulamasi2.Areas.Identity.Data;
 using HamburgerUygulaması.Entity;
 using Microsoft.AspNetCore.Authorization;
+using HamburgerUygulamasi2.Entity;
+using System.Security.Claims;
 
 namespace HamburgerUygulamasi2.Controllers
 {
@@ -153,11 +155,50 @@ namespace HamburgerUygulamasi2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> SepeteEkle(int id)
+        {
+            var secilenMenu = await _context.Menu.FindAsync(id);
+            var sepetUrun = new SepetUrun()
+            {
+                Menu = secilenMenu,
+                MenuId = secilenMenu.Id,
+                Miktar = 1,
+            };
+            return View(sepetUrun);
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> SepeteEkle(SepetUrun sepetUrun)
+        {
+            if (ModelState.IsValid)
+            {
+                 var userName= HttpContext.User.Identity.Name;
+                sepetUrun.User = _context.Users.Where(x=>x.UserName==userName).FirstOrDefault();
+                var sepetteUrunDb = await _context.SepetUrun.Where(x => x.UserId == sepetUrun.UserId && x.MenuId == sepetUrun.MenuId).FirstOrDefaultAsync();
+                if (sepetteUrunDb == null)
+                {
+                    _context.SepetUrun.Add(sepetUrun);
+                }
+                else
+                {
+                    sepetteUrunDb.Miktar = sepetteUrunDb.Miktar + sepetUrun.Miktar;
+                }
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+
+        }
         private bool MenuExists(int id)
         {
             return _context.Menu.Any(e => e.Id == id);
         }
 
- 
+
+
+
     }
 }

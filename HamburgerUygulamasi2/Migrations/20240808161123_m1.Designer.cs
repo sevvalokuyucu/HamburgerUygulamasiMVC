@@ -4,6 +4,7 @@ using HamburgerUygulamasi2.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HamburgerUygulamasi2.Migrations
 {
     [DbContext(typeof(HamburgerUygulamasiContext))]
-    partial class HamburgerUygulamasiContextModelSnapshot : ModelSnapshot
+    [Migration("20240808161123_m1")]
+    partial class m1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,30 +180,6 @@ namespace HamburgerUygulamasi2.Migrations
                     b.HasIndex("UserId1");
 
                     b.ToTable("Siparis");
-                });
-
-            modelBuilder.Entity("HamburgerUygulamasi2.Models.SepetteUrunSiparisViewModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("siparisId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("siparisId");
-
-                    b.ToTable("SepetteUrunSiparisViewModel");
                 });
 
             modelBuilder.Entity("HamburgerUygulaması.Entity.EkstraMalzeme", b =>
@@ -429,17 +408,6 @@ namespace HamburgerUygulamasi2.Migrations
                     b.Navigation("User");
 
                     b.Navigation("sepetUrun");
-                });
-
-            modelBuilder.Entity("HamburgerUygulamasi2.Models.SepetteUrunSiparisViewModel", b =>
-                {
-                    b.HasOne("HamburgerUygulamasi2.Entity.Siparis", "siparis")
-                        .WithMany()
-                        .HasForeignKey("siparisId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("siparis");
                 });
 
             modelBuilder.Entity("HamburgerUygulaması.Entity.EkstraMalzeme", b =>

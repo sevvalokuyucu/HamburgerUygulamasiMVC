@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using HamburgerUygulaması.Entity;
+using HamburgerUygulamasi2.Entity;
 using Microsoft.AspNetCore.Identity;
 
 namespace HamburgerUygulamasi2.Areas.Identity.Data;

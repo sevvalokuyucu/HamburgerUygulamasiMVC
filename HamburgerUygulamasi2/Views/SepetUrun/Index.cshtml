@@ -1,0 +1,59 @@
+﻿@model HamburgerUygulamasi2.Models.SepetteUrunSiparisViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                Menü Adı
+            </th>
+            <th>
+                Menü Fiyatı
+            </th>
+            <th>
+                Miktar
+            </th>
+
+        </tr>
+
+    </thead>
+    <tbody>
+        @if (Model.sepetUrunleri.Count>0)
+        {
+            foreach (var sepetUrun in Model.sepetUrunleri)
+            {
+                <tr>
+                    <td>
+                        @sepetUrun.Menu.MenuAdi
+                    </td>
+                    <td>
+                        @sepetUrun.Menu.MenuFiyati
+                    </td>
+                    <td>
+                        @sepetUrun.Miktar
+                    </td>
+                    <td>
+                        <a asp-action="Plus" asp-route-id="@sepetUrun.Id" class="btn btn-link">+</a> |
+                        <a asp-action="Minus" asp-route-id="@sepetUrun.Id">-</a> |
+                        <a asp-action="Delete" asp-route-id="@sepetUrun.Id" class="btn btn-link">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+
+            </tr>
+        }
+    </tbody>
+</table>

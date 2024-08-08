@@ -1,8 +1,10 @@
 ﻿using HamburgerUygulaması.Entity;
 using HamburgerUygulamasi2.Areas.Identity.Data;
+using HamburgerUygulamasi2.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using HamburgerUygulamasi2.Models;
 
 namespace HamburgerUygulamasi2.Areas.Identity.Data;
 
@@ -13,8 +15,8 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
     {
     }
 
+    public DbSet<SepetUrun> SepetUrun { get; set; }
     public DbSet<Siparis> Siparis { get; set; }
-    public DbSet<SiparisMalzeme> SiparisMalzeme { get; set; }
     public DbSet<Menu> Menu { get; set; }
     public DbSet<EkstraMalzeme> EkstraMalzeme { get; set; }
 
@@ -25,6 +27,8 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+
+public DbSet<HamburgerUygulamasi2.Models.SepetteUrunSiparisViewModel> SepetteUrunSiparisViewModel { get; set; } = default!;
 }
     
 

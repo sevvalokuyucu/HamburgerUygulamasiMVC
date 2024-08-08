@@ -1,0 +1,56 @@
+﻿@model HamburgerUygulamasi2.Entity.SepetUrun
+
+@{
+    ViewData["Title"] = "SepeteEkle";
+}
+
+<h1>Sepete Ekle</h1>
+
+<form method="post">
+    <div>
+        <h4>SepetUrun</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Menu)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Menu.MenuAdi)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Menu.MenuFiyati)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Menu.MenuFiyati)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.HiddenFor(model => model.Menu)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.HiddenFor(model => model.Menu.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.HiddenFor(model => model.UserId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.HiddenFor(model => model.UserId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Miktar)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.TextBoxFor(model => model.Miktar)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.HiddenFor(model => model.EkstraMalzemeId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.HiddenFor(model => model.EkstraMalzemeId)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <input type="submit" value="Sepete Ekle" class="btn btn-primary" />
+        <a asp-action="Index">Menu Listesine Geri Dön</a>
+    </div>
+</form>

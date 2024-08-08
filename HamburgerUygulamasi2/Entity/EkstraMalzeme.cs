@@ -6,6 +6,5 @@ namespace HamburgerUygulaması.Entity
     {
         public string MalzemeAdi { get; set; }
         public double MalzemeFiyati { get; set; }
-        public List<SiparisMalzeme> SiparisMalzeme { get; set; }
     }
 }

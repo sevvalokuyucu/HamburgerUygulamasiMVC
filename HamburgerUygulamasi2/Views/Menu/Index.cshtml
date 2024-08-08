@@ -38,14 +38,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.MenuFiyati)
                 </td>
-                <td>
-                    <div id="counterContainer-@item.Id">
-                        <button class="decrementButton" data-id="@item.Id">-</button>
-                        <button class="incrementButton" data-id="@item.Id">+</button>
-                        <span class="counterValue" id="counterValue-@item.Id">0</span>
-                    </div>
 
-                </td>
                 @if (User.IsInRole("Admin"))
                 {
                     <td>
@@ -54,35 +47,11 @@
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>
                 }
+                <td>
+                    <a asp-action="SepeteEkle" asp-route-id="@item.Id">Sepete Ekle</a> |
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
-
-<script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        document.querySelectorAll('.incrementButton').forEach(button => {
-            button.addEventListener('click', function () {
-                var id = this.getAttribute('data-id');
-                var counterValue = document.getElementById('counterValue-' + id);
-                counterValue.textContent = parseInt(counterValue.textContent) + 1;                
-            });
-        });
-
-        document.querySelectorAll('.decrementButton').forEach(button => {
-            button.addEventListener('click', function () {
-                var id = this.getAttribute('data-id');
-                var counterValue = document.getElementById('counterValue-' + id);
-                if (parseInt(counterValue.textContent) > 0) {
-                    counterValue.textContent = parseInt(counterValue.textContent) - 1;
-                }
-            });
-        });
-    });
-</script>
-<form id="orderForm" method="post" asp-controller="Siparis" asp-action="Create">
-
-        <input type="submit" value="Sipariş Oluştur" class="btn btn-primary" />
-    </div>
-</form>

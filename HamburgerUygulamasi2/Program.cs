@@ -7,6 +7,9 @@ var connectionString = builder.Configuration.GetConnectionString("HamburgerUygul
 builder.Services.AddDbContext<HamburgerUygulamasiContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<HamburgerUygulamasiContext>();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -23,12 +26,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 
 app.UseRouting();
 
 app.MapRazorPages();
 
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
