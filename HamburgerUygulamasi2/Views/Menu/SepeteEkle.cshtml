@@ -4,53 +4,40 @@
     ViewData["Title"] = "SepeteEkle";
 }
 
-<h1>Sepete Ekle</h1>
+<h1>SepeteEkle</h1>
 
-<form method="post">
-    <div>
-        <h4>SepetUrun</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Menu)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Menu.MenuAdi)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Menu.MenuFiyati)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Menu.MenuFiyati)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.HiddenFor(model => model.Menu)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.HiddenFor(model => model.Menu.Id)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.HiddenFor(model => model.UserId)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.HiddenFor(model => model.UserId)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Miktar)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.TextBoxFor(model => model.Miktar)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.HiddenFor(model => model.EkstraMalzemeId)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.HiddenFor(model => model.EkstraMalzemeId)
-            </dd>
-        </dl>
+<h4>SepetUrun</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SepeteEkle" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label class="control-label">Menu Adı</label>
+                <label class="control-label">@Model.Menu.MenuAdi</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Menu Fiyatı</label>
+                <label class="control-label">@Model.Menu.MenuFiyati</label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Miktar" class="control-label"></label>
+                <input asp-for="Miktar" class="form-control" />
+                <span asp-validation-for="Miktar" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="MenuId" />
+            <input type="hidden" asp-for="Menu" />
+            <input type="hidden" asp-for="User" />
+            <input type="hidden" asp-for="UserId" />
+            <div class="form-group">
+                <input type="submit" value="Sepete Ekle" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
-    <div>
-        <input type="submit" value="Sepete Ekle" class="btn btn-primary" />
-        <a asp-action="Index">Menu Listesine Geri Dön</a>
-    </div>
-</form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

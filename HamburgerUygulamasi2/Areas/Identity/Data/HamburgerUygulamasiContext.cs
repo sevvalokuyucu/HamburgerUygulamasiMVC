@@ -28,7 +28,7 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
         // Add your customizations after calling base.OnModelCreating(builder);
     }
 
-public DbSet<HamburgerUygulamasi2.Models.SepetteUrunSiparisViewModel> SepetteUrunSiparisViewModel { get; set; } = default!;
+public DbSet<SepetteUrunSiparisViewModel> SepetteUrunSiparisViewModel { get; set; } 
 }
     
 

@@ -159,11 +159,17 @@ namespace HamburgerUygulamasi2.Controllers
         public async Task<IActionResult> SepeteEkle(int id)
         {
             var secilenMenu = await _context.Menu.FindAsync(id);
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var userdb = await _context.Users.FirstOrDefaultAsync(x => x.Id == claim.Value);
+            
             var sepetUrun = new SepetUrun()
             {
                 Menu = secilenMenu,
                 MenuId = secilenMenu.Id,
                 Miktar = 1,
+                UserId = userdb.Id,
+                User = userdb
             };
             return View(sepetUrun);
         }
@@ -171,26 +177,22 @@ namespace HamburgerUygulamasi2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> SepeteEkle(SepetUrun sepetUrun)
+        public async Task<IActionResult> SepeteEkle([FromForm] SepetUrun sepetUrun)
         {
-            if (ModelState.IsValid)
-            {
-                 var userName= HttpContext.User.Identity.Name;
-                sepetUrun.User = _context.Users.Where(x=>x.UserName==userName).FirstOrDefault();
-                var sepetteUrunDb = await _context.SepetUrun.Where(x => x.UserId == sepetUrun.UserId && x.MenuId == sepetUrun.MenuId).FirstOrDefaultAsync();
+            sepetUrun.Menu = _context.Menu.FirstOrDefault(x => x.Id == sepetUrun.MenuId);
+            sepetUrun.User = _context.Users.FirstOrDefault(x => x.Id == sepetUrun.UserId);
+            sepetUrun.Id = 0;
+            var sepetteUrunDb = await _context.SepetUrun.Where(x => x.UserId == sepetUrun.UserId && x.MenuId == sepetUrun.MenuId).FirstOrDefaultAsync();
                 if (sepetteUrunDb == null)
                 {
-                    _context.SepetUrun.Add(sepetUrun);
+                    await _context.SepetUrun.AddAsync(sepetUrun);
                 }
                 else
                 {
                     sepetteUrunDb.Miktar = sepetteUrunDb.Miktar + sepetUrun.Miktar;
                 }
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return RedirectToAction("Index");
-
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index","SepetUrun");
         }
         private bool MenuExists(int id)
         {
