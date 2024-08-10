@@ -13,7 +13,6 @@ namespace HamburgerUygulamasi2.Entity
         public User User { get; set; }
         public int Miktar { get; set; }
 
-
         public int? EkstraMalzemeId { get; set; }
         public List<EkstraMalzeme>? ekstraMalzemeler { get; set; }
     }

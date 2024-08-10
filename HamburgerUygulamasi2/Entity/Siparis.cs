@@ -12,8 +12,7 @@ namespace HamburgerUygulamasi2.Entity
         public double SiparisToplam { get; set; }
         public string SiparisDurumu {  get; set; }
 
-        public int SepetUrunId { get; set; }
-        public SepetUrun sepetUrun { get; set; }
+        public List<SepetUrun> sepetUrun { get; set; }
 
         public int Miktar {  get; set; }
 

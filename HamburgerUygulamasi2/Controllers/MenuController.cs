@@ -10,6 +10,8 @@ using HamburgerUygulaması.Entity;
 using Microsoft.AspNetCore.Authorization;
 using HamburgerUygulamasi2.Entity;
 using System.Security.Claims;
+using HamburgerUygulamasi2.Models;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace HamburgerUygulamasi2.Controllers
 {
@@ -191,7 +193,14 @@ namespace HamburgerUygulamasi2.Controllers
                 {
                     sepetteUrunDb.Miktar = sepetteUrunDb.Miktar + sepetUrun.Miktar;
                 }
-                await _context.SaveChangesAsync();
+
+            var details = new SepetteUrunSiparisViewModel()
+            {
+                siparis = new HamburgerUygulamasi2.Entity.Siparis()
+            };
+
+
+            await _context.SaveChangesAsync();
                 return RedirectToAction("Index","SepetUrun");
         }
         private bool MenuExists(int id)
