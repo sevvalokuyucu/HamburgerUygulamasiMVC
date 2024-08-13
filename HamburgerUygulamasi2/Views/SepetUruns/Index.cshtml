@@ -1,8 +1,14 @@
 ﻿@model IEnumerable<HamburgerUygulamasi2.Entity.SepetUrun>
-
 @{
     ViewData["Title"] = "Index";
+    var siparisId = ViewBag.SiparisId;
 }
+@if(Model==null)
+{
+    <h1>Sepette Ürün Yok...</h1>
+}
+else
+{
 
 <h1>Index</h1>
 
@@ -20,9 +26,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.boyut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Siparis)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AraToplamFiyat)
@@ -46,9 +49,6 @@
                 @Html.DisplayFor(modelItem => item.boyut)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Siparis.Id)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.AraToplamFiyat)
             </td>
             <td>
@@ -63,3 +63,9 @@
 }
     </tbody>
 </table>
+<form asp-controller="Siparis" asp-action="Details" asp-route-id=@siparisId>
+<div class="form-control">
+    <input type="submit" value="Sipariş Oluştur" class="btn btn-outline-primary" ></input>
+</div>
+</form>
+}

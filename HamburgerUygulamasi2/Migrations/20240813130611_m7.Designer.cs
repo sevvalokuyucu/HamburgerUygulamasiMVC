@@ -4,6 +4,7 @@ using HamburgerUygulamasi2.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HamburgerUygulamasi2.Migrations
 {
     [DbContext(typeof(HamburgerUygulamasiContext))]
-    partial class HamburgerUygulamasiContextModelSnapshot : ModelSnapshot
+    [Migration("20240813130611_m7")]
+    partial class m7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,7 +175,7 @@ namespace HamburgerUygulamasi2.Migrations
                     b.Property<int>("Miktar")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SiparisId")
+                    b.Property<int>("SiparisId")
                         .HasColumnType("int");
 
                     b.Property<int>("boyut")
@@ -196,6 +199,7 @@ namespace HamburgerUygulamasi2.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Aciklama")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("AraToplam")
@@ -381,7 +385,9 @@ namespace HamburgerUygulamasi2.Migrations
 
                     b.HasOne("HamburgerUygulamasi2.Entity.Siparis", "Siparis")
                         .WithMany("SepetUrunleri")
-                        .HasForeignKey("SiparisId");
+                        .HasForeignKey("SiparisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Menu");
 

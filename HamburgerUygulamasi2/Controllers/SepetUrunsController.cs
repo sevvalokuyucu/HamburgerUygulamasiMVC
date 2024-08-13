@@ -26,8 +26,15 @@ namespace HamburgerUygulamasi2.Controllers
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             var userdb = await _context.Users.FirstOrDefaultAsync(x => x.Id == claim.Value);
-            var sepetUrunleri = _context.SepetUrun.Include(s => s.Menu).Include(s => s.Siparis).Where(s=>s.Siparis.UserId==userdb.Id);
-            return View(await sepetUrunleri.ToListAsync());
+            var sepetUrunleri = _context.SepetUrun.Include(s => s.Menu).Include(s => s.Siparis).Where(s=>s.Siparis.UserId==userdb.Id&&s.Siparis.SiparisOnayliMi==false);
+            var siparis = _context.Siparis.FirstOrDefault(x => x.SiparisOnayliMi == false && x.UserId == userdb.Id);
+            if(siparis != null)
+            {
+                ViewBag.SiparisId = siparis.Id;
+                return View(await sepetUrunleri.ToListAsync());
+            }
+            ViewBag.SiparisId = 0;
+            return View();
         }
 
         // GET: SepetUruns/Details/5

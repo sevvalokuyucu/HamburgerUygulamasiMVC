@@ -172,6 +172,17 @@ namespace HamburgerUygulamasi2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SiparisiOnayla(int id)
+        {
+            var siparis = await _context.Siparis.FindAsync(id);
+            siparis.SiparisOnayliMi = true;
+            _context.Siparis.Update(siparis);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { @id = id });
+        }
         private bool SiparisExists(int id)
         {
             return _context.Siparis.Any(e => e.Id == id);
