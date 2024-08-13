@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HamburgerUygulamasi2.Areas.Identity.Data;
-using HamburgerUygulaması.Entity;
 using Microsoft.AspNetCore.Authorization;
 using HamburgerUygulamasi2.Entity;
 using System.Security.Claims;
 using HamburgerUygulamasi2.Models;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HamburgerUygulamasi2.Controllers
 {
@@ -161,18 +161,24 @@ namespace HamburgerUygulamasi2.Controllers
         public async Task<IActionResult> SepeteEkle(int id)
         {
             var secilenMenu = await _context.Menu.FindAsync(id);
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            var userdb = await _context.Users.FirstOrDefaultAsync(x => x.Id == claim.Value);
-            
+
             var sepetUrun = new SepetUrun()
             {
                 Menu = secilenMenu,
                 MenuId = secilenMenu.Id,
                 Miktar = 1,
-                UserId = userdb.Id,
-                User = userdb
             };
+            #region enum sipariş boyutu
+            var boyutlar = Enum.GetValues(typeof(SepetUrun.Boyut))
+                  .Cast<SepetUrun.Boyut>()
+                  .Select(b => new SelectListItem
+                  {
+                      Value = ((int)b).ToString(),
+                      Text = b.ToString()
+                  }).ToList();
+
+            ViewBag.Boyutlar = boyutlar;
+            #endregion
             return View(sepetUrun);
         }
         [AllowAnonymous]
@@ -181,27 +187,44 @@ namespace HamburgerUygulamasi2.Controllers
 
         public async Task<IActionResult> SepeteEkle([FromForm] SepetUrun sepetUrun)
         {
-            sepetUrun.Menu = _context.Menu.FirstOrDefault(x => x.Id == sepetUrun.MenuId);
-            sepetUrun.User = _context.Users.FirstOrDefault(x => x.Id == sepetUrun.UserId);
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var userdb = await _context.Users.FirstOrDefaultAsync(x => x.Id == claim.Value);
+            var secilenMenu = _context.Menu.FirstOrDefault(x => x.Id == sepetUrun.MenuId);
+            sepetUrun.Menu = secilenMenu;
+            _context.Menu.Update(secilenMenu);
             sepetUrun.Id = 0;
-            var sepetteUrunDb = await _context.SepetUrun.Where(x => x.UserId == sepetUrun.UserId && x.MenuId == sepetUrun.MenuId).FirstOrDefaultAsync();
-                if (sepetteUrunDb == null)
-                {
-                    await _context.SepetUrun.AddAsync(sepetUrun);
-                }
-                else
-                {
-                    sepetteUrunDb.Miktar = sepetteUrunDb.Miktar + sepetUrun.Miktar;
-                }
-
-            var details = new SepetteUrunSiparisViewModel()
+            sepetUrun.AraToplamFiyat = sepetUrun.Menu.MenuFiyati * sepetUrun.Miktar;
+            bool onayliSiparisVarMi = _context.Siparis.Any(x => (x.SiparisOnayliMi == false) && (x.User.Id==userdb.Id ));
+            if (onayliSiparisVarMi)
             {
-                siparis = new HamburgerUygulamasi2.Entity.Siparis()
-            };
-
-
+                var siparis = _context.Siparis.FirstOrDefault(x => (x.SiparisOnayliMi == false) && (x.User.Id == userdb.Id));
+                sepetUrun.Siparis = siparis;
+                sepetUrun.SiparisId = siparis.Id;
+                _context.SepetUrun.Add(sepetUrun);
+                siparis.SiparisToplamTutar += sepetUrun.AraToplamFiyat;
+                siparis.ModifiedDate = DateTime.Now;
+                _context.Siparis.Update(siparis);
+            }
+            else
+            {
+                Siparis yeniSiparis = new Siparis()
+                {
+                    User = userdb,
+                    UserId = userdb.Id,
+                    SiparisToplamTutar = sepetUrun.AraToplamFiyat,
+                };
+                sepetUrun.Siparis = yeniSiparis;
+                sepetUrun.SiparisId = yeniSiparis.Id;
+                _context.SepetUrun.Add(sepetUrun);
+                _context.Siparis.Add(yeniSiparis);                
+            }
+           
+            
+            
+            
             await _context.SaveChangesAsync();
-                return RedirectToAction("Index","SepetUrun");
+            return RedirectToAction("Index");
         }
         private bool MenuExists(int id)
         {

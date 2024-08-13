@@ -5,7 +5,7 @@
 namespace HamburgerUygulamasi2.Migrations
 {
     /// <inheritdoc />
-    public partial class m7 : Migration
+    public partial class m4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

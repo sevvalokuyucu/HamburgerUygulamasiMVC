@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
-using HamburgerUygulaması.Entity;
 using HamburgerUygulamasi2.Entity;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,7 +13,7 @@ public class User : IdentityUser
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public List<Siparis> Siparis { get; set; }
+    public List<Siparis> Siparisler { get; set; }
 
 }
 

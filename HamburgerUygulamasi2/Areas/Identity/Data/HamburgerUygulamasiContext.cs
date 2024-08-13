@@ -1,10 +1,12 @@
-﻿using HamburgerUygulaması.Entity;
-using HamburgerUygulamasi2.Areas.Identity.Data;
+﻿using HamburgerUygulamasi2.Areas.Identity.Data;
 using HamburgerUygulamasi2.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using HamburgerUygulamasi2.Models;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
+
 
 namespace HamburgerUygulamasi2.Areas.Identity.Data;
 
@@ -26,9 +28,9 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
-    }
 
-public DbSet<SepetteUrunSiparisViewModel> SepetteUrunSiparisViewModel { get; set; } 
+    }
 }
+
     
 

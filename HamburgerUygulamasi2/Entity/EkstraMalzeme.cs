@@ -1,6 +1,6 @@
 ﻿using System.Reflection.PortableExecutable;
 
-namespace HamburgerUygulaması.Entity
+namespace HamburgerUygulamasi2.Entity
 {
     public class EkstraMalzeme : BaseEntity
     {

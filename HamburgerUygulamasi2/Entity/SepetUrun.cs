@@ -1,5 +1,4 @@
-﻿using HamburgerUygulaması.Entity;
-using HamburgerUygulamasi2.Areas.Identity.Data;
+﻿using HamburgerUygulamasi2.Areas.Identity.Data;
 
 namespace HamburgerUygulamasi2.Entity
 {
@@ -9,11 +8,19 @@ namespace HamburgerUygulamasi2.Entity
         public int MenuId { get; set; }
         public Menu Menu { get; set; }
 
-        public string UserId { get; set; }
-        public User User { get; set; }
         public int Miktar { get; set; }
+
+        public Boyut boyut { get; set; }
+        public enum Boyut { Küçük, Orta, Büyük }
+
+        public Siparis Siparis { get; set; }
+        public int SiparisId { get; set; }
+
+        public double AraToplamFiyat { get; set; }
 
         public int? EkstraMalzemeId { get; set; }
         public List<EkstraMalzeme>? ekstraMalzemeler { get; set; }
+
+
     }
 }

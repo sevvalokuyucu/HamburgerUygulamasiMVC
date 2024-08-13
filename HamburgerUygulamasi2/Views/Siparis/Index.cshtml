@@ -1,0 +1,66 @@
+﻿@model IEnumerable<HamburgerUygulamasi2.Entity.Siparis>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SiparisToplamTutar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SiparisOnayliMi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aciklama)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SiparisToplamTutar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SiparisOnayliMi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aciklama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Siparişi Düzenle</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Sipariş İçeriği</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Siparişi Sil</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

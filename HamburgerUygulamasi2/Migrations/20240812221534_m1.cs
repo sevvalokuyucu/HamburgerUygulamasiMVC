@@ -175,29 +175,55 @@ namespace HamburgerUygulamasi2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Siparis",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SiparisToplamTutar = table.Column<double>(type: "float", nullable: false),
+                    OnayliSiparisVarMi = table.Column<bool>(type: "bit", nullable: false),
+                    Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Siparis", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Siparis_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SepetUrun",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MenuId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Miktar = table.Column<int>(type: "int", nullable: false),
-                    EkstraMalzemeId = table.Column<int>(type: "int", nullable: false)
+                    boyut = table.Column<int>(type: "int", nullable: false),
+                    SiparisId = table.Column<int>(type: "int", nullable: false),
+                    AraToplamFiyat = table.Column<double>(type: "float", nullable: false),
+                    EkstraMalzemeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SepetUrun", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SepetUrun_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_SepetUrun_Menu_MenuId",
                         column: x => x.MenuId,
                         principalTable: "Menu",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SepetUrun_Siparis_SiparisId",
+                        column: x => x.SiparisId,
+                        principalTable: "Siparis",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -222,40 +248,6 @@ namespace HamburgerUygulamasi2.Migrations
                         column: x => x.SepetUrunId,
                         principalTable: "SepetUrun",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Siparis",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    AraToplam = table.Column<double>(type: "float", nullable: false),
-                    SiparisToplam = table.Column<double>(type: "float", nullable: false),
-                    SiparisDurumu = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SepetUrunId = table.Column<int>(type: "int", nullable: false),
-                    Miktar = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ToplamTutar = table.Column<double>(type: "float", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Siparis", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Siparis_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Siparis_SepetUrun_SepetUrunId",
-                        column: x => x.SepetUrunId,
-                        principalTable: "SepetUrun",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -308,19 +300,14 @@ namespace HamburgerUygulamasi2.Migrations
                 column: "MenuId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SepetUrun_UserId1",
+                name: "IX_SepetUrun_SiparisId",
                 table: "SepetUrun",
-                column: "UserId1");
+                column: "SiparisId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Siparis_SepetUrunId",
+                name: "IX_Siparis_UserId",
                 table: "Siparis",
-                column: "SepetUrunId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Siparis_UserId1",
-                table: "Siparis",
-                column: "UserId1");
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -345,19 +332,19 @@ namespace HamburgerUygulamasi2.Migrations
                 name: "EkstraMalzeme");
 
             migrationBuilder.DropTable(
-                name: "Siparis");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "SepetUrun");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Menu");
 
             migrationBuilder.DropTable(
-                name: "Menu");
+                name: "Siparis");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

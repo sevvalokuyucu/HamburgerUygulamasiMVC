@@ -10,13 +10,19 @@ namespace HamburgerUygulamasi2.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.RenameColumn(
+                name: "Açıklama",
+                table: "Siparis",
+                newName: "Aciklama");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.RenameColumn(
+                name: "Aciklama",
+                table: "Siparis",
+                newName: "Açıklama");
         }
     }
 }
