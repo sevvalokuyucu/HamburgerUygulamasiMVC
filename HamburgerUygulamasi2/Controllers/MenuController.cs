@@ -12,6 +12,8 @@ using System.Security.Claims;
 using HamburgerUygulamasi2.Models;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace HamburgerUygulamasi2.Controllers
 {
@@ -174,7 +176,8 @@ namespace HamburgerUygulamasi2.Controllers
                   .Select(b => new SelectListItem
                   {
                       Value = ((int)b).ToString(),
-                      Text = b.ToString()
+                      Text = b.ToString().Replace("_", " ").Replace("w", "+")
+
                   }).ToList();
 
             ViewBag.Boyutlar = boyutlar;

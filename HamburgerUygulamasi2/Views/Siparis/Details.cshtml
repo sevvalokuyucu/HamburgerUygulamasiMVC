@@ -65,11 +65,15 @@
         </dd>
     </dl>
 </div>
-<form asp-action="SiparisiOnayla" asp-route-id=@Model.Item2.Id method="post">
-    <div class="form-control">
-        <input type="submit" value="Siparişi Onayla" class="btn btn-success"></input>
-    </div>
-</form>
+@if (Model.Item2.SiparisOnayliMi == false)
+{
+    <form asp-action="SiparisiOnayla" asp-route-id=@Model.Item2.Id
+    method="post">
+        <div class="form-control">
+            <input type="submit" value="Siparişi Onayla" class="btn btn-success"></input>
+        </div>
+    </form>
+}
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Item2.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
