@@ -4,5 +4,7 @@
     {
         public string MenuAdi { get; set; }
         public double MenuFiyati { get; set; }
+        public List<Malzeme>? MenuMalzemeler {  get; set; }
+        
     }
 }

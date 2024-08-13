@@ -55,6 +55,9 @@ namespace HamburgerUygulamasi2.Controllers
         // GET: Menu/Create
         public IActionResult Create()
         {
+            var malzemeler = _context.Malzeme.ToList();
+            if(malzemeler!=null)
+            { ViewBag.malzeme = malzemeler; }
             return View();
         }
 
@@ -63,8 +66,9 @@ namespace HamburgerUygulamasi2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MenuAdi,MenuFiyati")] Menu menu)
+        public async Task<IActionResult> Create([Bind("MenuAdi,MenuFiyati,MenuMalzemeleri")] Menu menu)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(menu);

@@ -21,6 +21,7 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
     public DbSet<Siparis> Siparis { get; set; }
     public DbSet<Menu> Menu { get; set; }
     public DbSet<EkstraMalzeme> EkstraMalzeme { get; set; }
+    public DbSet<Malzeme> Malzeme { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
