@@ -39,8 +39,6 @@ namespace HamburgerUygulamasi2.Entity
             }
             
         }
-
-        public int? EkstraMalzemeId { get; set; }
         public List<EkstraMalzeme>? ekstraMalzemeler { get; set; }
 
 

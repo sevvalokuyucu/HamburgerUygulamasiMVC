@@ -39,9 +39,10 @@
                 <span asp-validation-for="AraToplamFiyat" class="text-danger" hidden></span>
             </div>
             <div class="form-group">
-                <label asp-for="EkstraMalzemeId" class="control-label"></label>
-                <input asp-for="EkstraMalzemeId" class="form-control" />
-                <span asp-validation-for="EkstraMalzemeId" class="text-danger"></span>
+                <label asp-for="ekstraMalzemeler" class="control-label"></label>
+                @Html.DropDownListFor(model => model.ekstraMalzemeler, new SelectList(Model.ekstraMalzemeler)),
+                ))
+                <span asp-validation-for="ekstraMalzemeler" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

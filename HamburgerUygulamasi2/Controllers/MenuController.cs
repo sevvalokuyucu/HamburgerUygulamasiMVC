@@ -14,6 +14,8 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Hosting;
+using NuGet.Packaging;
 
 namespace HamburgerUygulamasi2.Controllers
 {
@@ -57,7 +59,7 @@ namespace HamburgerUygulamasi2.Controllers
         {
             var malzemeler = _context.Malzeme.ToList();
             if(malzemeler!=null)
-            { ViewBag.malzeme = malzemeler; }
+                TempData["Malzemeler"] = malzemeler;
             return View();
         }
 
@@ -66,32 +68,60 @@ namespace HamburgerUygulamasi2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MenuAdi,MenuFiyati,MenuMalzemeleri")] Menu menu)
+        public async Task<IActionResult> Create(MenuViewModel menuViewModel)
         {
 
-            if (ModelState.IsValid)
+
+            try
             {
-                _context.Add(menu);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Menu menu = new Menu();
+                if (menuViewModel.ImageUrl != null)
+                {
+                    var fileName = menuViewModel.ImageUrl.FileName;
+
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/image", fileName);
+
+                    var stream = new FileStream(path, FileMode.Create);
+
+                    menuViewModel.ImageUrl.CopyTo(stream);
+
+                    stream.Close();
+
+                    menu.ImageName = fileName;
+
+                }
+                menu.MenuAdi = menuViewModel.MenuAdi;
+                menu.MenuFiyati = menuViewModel.MenuFiyati;
+                
+
+                _context.Menu.Add(menu);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return View(menu);
+            catch (Exception ex) { return View(); }
+            
+   
         }
 
         // GET: Menu/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var menu = await _context.Menu.FindAsync(id);
-            if (menu == null)
-            {
-                return NotFound();
-            }
-            return View(menu);
+            Menu updatedMenu = _context.Menu.Find(id);
+
+            TempData["Id"] = updatedMenu.Id;
+
+            MenuViewModel menuViewModel = new MenuViewModel();
+
+            menuViewModel.MenuFiyati = updatedMenu.MenuFiyati;
+
+            menuViewModel.MenuAdi = updatedMenu.MenuAdi;
+
+            ViewBag.ImageName = updatedMenu.ImageName;
+
+
+            return View(menuViewModel);
+
         }
 
         // POST: Menu/Edit/5
@@ -99,35 +129,58 @@ namespace HamburgerUygulamasi2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MenuAdi,MenuFiyati,ModifiedDate")] Menu menu)
+        public async Task<IActionResult> Edit(MenuViewModel menuViewModel)
         {
-            if (id != menu.Id)
+
+            Menu updatedMenu = _context.Menu.Find(TempData["Id"]);
+
+            try
+
             {
-                return NotFound();
+
+                if (menuViewModel.ImageUrl != null && menuViewModel.ImageUrl.FileName != updatedMenu.ImageName)
+
+                {
+
+                    DeleteImage(updatedMenu);
+
+                    var fileName = menuViewModel.ImageUrl.FileName;
+
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/image", fileName);
+
+                    var stream = new FileStream(path, FileMode.Create);
+
+                    menuViewModel.ImageUrl.CopyTo(stream);
+
+                    stream.Close();
+
+                    updatedMenu.ImageName = fileName;
+
+                }
+
+                updatedMenu.MenuFiyati = menuViewModel.MenuFiyati;
+                updatedMenu.MenuAdi = menuViewModel.MenuAdi;
+                updatedMenu.ModifiedDate = DateTime.Now;
+
+
+
+                _context.Menu.Update(updatedMenu);
+
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+
             }
 
-            if (ModelState.IsValid)
+            catch (Exception ex)
+
             {
-                try
-                {
-                    menu.ModifiedDate = DateTime.Now;
-                    _context.Update(menu);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MenuExists(menu.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
+                TempData["Status"] = "Error occured! " + ex.Message;
+
+                return View();
+
             }
-            return View(menu);
         }
 
         // GET: Menu/Delete/5
@@ -185,6 +238,9 @@ namespace HamburgerUygulamasi2.Controllers
                   }).ToList();
 
             ViewBag.Boyutlar = boyutlar;
+            var ekstraMalzemes = _context.EkstraMalzeme.ToList();
+            if (ekstraMalzemes != null)
+                ViewData["ekstraMalzemeler"]=ekstraMalzemes;
             #endregion
             return View(sepetUrun);
         }
@@ -192,7 +248,7 @@ namespace HamburgerUygulamasi2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> SepeteEkle([FromForm] SepetUrun sepetUrun)
+        public async Task<IActionResult> SepeteEkle([FromForm] SepetUrun sepetUrun, int[] secilenMalzemeler)
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -202,6 +258,13 @@ namespace HamburgerUygulamasi2.Controllers
             _context.Menu.Update(secilenMenu);
             sepetUrun.Id = 0;
             sepetUrun.AraToplamFiyat = sepetUrun.Menu.MenuFiyati * sepetUrun.Miktar;
+            List<EkstraMalzeme> extramalzemes = new List<EkstraMalzeme>();
+            foreach(var item in secilenMalzemeler)
+            {
+                var ekstraMalzeme = _context.EkstraMalzeme.Find(item);
+                extramalzemes.Add( ekstraMalzeme );
+            }
+            sepetUrun.ekstraMalzemeler = extramalzemes;
             bool onayliSiparisVarMi = _context.Siparis.Any(x => (x.SiparisOnayliMi == false) && (x.User.Id==userdb.Id ));
             if (onayliSiparisVarMi)
             {
@@ -239,6 +302,23 @@ namespace HamburgerUygulamasi2.Controllers
         }
 
 
+        public void DeleteImage(Menu menu)
+
+        {
+
+            var otherMenuExist = _context.Menu.Any(p => p.ImageName == menu.ImageName && p.Id != menu.Id);
+
+            if (menu.ImageName != null && !otherMenuExist)
+
+            {
+
+                var file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/image", menu.ImageName);
+
+                System.IO.File.Delete(file);
+
+            }
+
+        }
 
 
     }

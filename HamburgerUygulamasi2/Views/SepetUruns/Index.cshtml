@@ -19,7 +19,7 @@ else
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Menu)
+                @Html.DisplayNameFor(model => model.Menu.MenuAdi)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Miktar)
@@ -31,7 +31,7 @@ else
                 @Html.DisplayNameFor(model => model.AraToplamFiyat)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EkstraMalzemeId)
+                @Html.DisplayNameFor(model => model.ekstraMalzemeler)
             </th>
             <th></th>
         </tr>
@@ -40,7 +40,7 @@ else
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Menu.Id)
+                @Html.DisplayFor(modelItem => item.Menu.MenuAdi)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Miktar)
@@ -52,7 +52,11 @@ else
                 @Html.DisplayFor(modelItem => item.AraToplamFiyat)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EkstraMalzemeId)
+                @if(item.ekstraMalzemeler!=null)
+                {
+               @Html.DropDownListFor(modelItem => item.ekstraMalzemeler, new SelectList(item.ekstraMalzemeler))
+                        
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

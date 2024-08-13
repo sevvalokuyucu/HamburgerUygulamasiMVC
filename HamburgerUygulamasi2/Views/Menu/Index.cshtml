@@ -20,6 +20,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ImageName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.MenuAdi)
             </th>
             <th>
@@ -32,6 +35,11 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>
+                    <div class="col-md-4">
+                        <img src="~/image/@item.ImageName" class="img-fluid rounded-start" alt="...">
+                    </div>
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.MenuAdi)
                 </td>

@@ -1,17 +1,18 @@
-﻿@model HamburgerUygulamasi2.Entity.Menu
+﻿@model HamburgerUygulamasi2.Models.MenuViewModel
 
 @{
     ViewData["Title"] = "Create";
-    var malzemeler = ViewBag.Malzemeler;
 }
-
+@{
+    var malzemeListesi = TempData["Malzemeler"] as List<HamburgerUygulamasi2.Entity.Malzeme>;
+}
 <h1>Create</h1>
 
 <h4>Menu</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="MenuAdi" class="control-label"></label>
@@ -24,17 +25,23 @@
                 <span asp-validation-for="MenuFiyati" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="MenuMalzemeleri">Malzemeler:</label>
-                <select id="MenuMalzemeleri" name="selectedMalzemeler" multiple class="form-control">,
-                    @if(malzemeler!=null)
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" type="file" id="ImageUrl" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div>
+                <label for="malzemeler">Malzemeler:</label>
+                <select id="malzemeler" name="secilenMalzemeler[]" multiple="multiple" class="form-control">
+                    @if (malzemeListesi != null)
                     {
-                    @foreach (var malzeme in malzemeler)
-                    {
-                    <option value="@malzeme.Id">@malzeme.MalzemeAdi</option>
-                    } 
+                        foreach (var malzeme in malzemeListesi)
+                        {
+                            <option value="@malzeme.Id">@malzeme.MalzemeAdi</option>
+                        }
                     }
                 </select>
             </div>
+            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
