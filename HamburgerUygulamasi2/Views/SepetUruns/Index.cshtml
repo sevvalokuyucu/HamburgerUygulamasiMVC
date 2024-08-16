@@ -54,7 +54,7 @@ else
             <td>
                 @if(item.ekstraMalzemeler!=null)
                 {
-               @Html.DropDownListFor(modelItem => item.ekstraMalzemeler, new SelectList(item.ekstraMalzemeler))
+                            @Html.DropDownListFor(modelItem => item.ekstraMalzemeler, new SelectList(item.ekstraMalzemeler, "Id", "MalzemeAdi"))
                         
                 }
             </td>

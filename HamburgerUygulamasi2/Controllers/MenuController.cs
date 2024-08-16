@@ -262,7 +262,7 @@ namespace HamburgerUygulamasi2.Controllers
             foreach(var item in secilenMalzemeler)
             {
                 var ekstraMalzeme = _context.EkstraMalzeme.Find(item);
-                extramalzemes.Add( ekstraMalzeme );
+                extramalzemes.Add(ekstraMalzeme);
             }
             sepetUrun.ekstraMalzemeler = extramalzemes;
             bool onayliSiparisVarMi = _context.Siparis.Any(x => (x.SiparisOnayliMi == false) && (x.User.Id==userdb.Id ));
@@ -272,6 +272,16 @@ namespace HamburgerUygulamasi2.Controllers
                 sepetUrun.Siparis = siparis;
                 sepetUrun.SiparisId = siparis.Id;
                 _context.SepetUrun.Add(sepetUrun);
+                await _context.SaveChangesAsync();
+                var urun = _context.SepetUrun.OrderByDescending(x => x.Id).First();
+                foreach (var item in extramalzemes)
+                {
+                    _context.SepetUrunMalzemeler.Add(new SepetUrunMalzeme
+                    {
+                        SepetUrunId = urun.Id,
+                        EkstraMalzemeId = item.Id
+                    });
+                }
                 siparis.SiparisToplamTutar += sepetUrun.AraToplamFiyat;
                 siparis.ModifiedDate = DateTime.Now;
                 _context.Siparis.Update(siparis);

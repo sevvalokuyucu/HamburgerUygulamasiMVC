@@ -31,6 +31,10 @@ namespace HamburgerUygulamasi2.Controllers
             if(siparis != null)
             {
                 ViewBag.SiparisId = siparis.Id;
+                foreach (var item in sepetUrunleri)
+                {
+                    item.ekstraMalzemeler = _context.SepetUrunMalzemeler.Where(s => s.SepetUrunId == item.Id).Select(x => x.EkstraMalzeme).ToList();
+                }
                 return View(await sepetUrunleri.ToListAsync());
             }
             ViewBag.SiparisId = 0;

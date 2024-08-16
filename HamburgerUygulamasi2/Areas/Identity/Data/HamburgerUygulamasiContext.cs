@@ -22,6 +22,7 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
     public DbSet<Menu> Menu { get; set; }
     public DbSet<EkstraMalzeme> EkstraMalzeme { get; set; }
     public DbSet<Malzeme> Malzeme { get; set; }
+    public DbSet<SepetUrunMalzeme> SepetUrunMalzemeler { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -30,7 +31,7 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
 
-    }
+    } 
 }
 
     
