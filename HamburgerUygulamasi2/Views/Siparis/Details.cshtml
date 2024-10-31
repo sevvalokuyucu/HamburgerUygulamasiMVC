@@ -1,0 +1,80 @@
+﻿@model Tuple<List<HamburgerUygulamasi2.Entity.SepetUrun>,HamburgerUygulamasi2.Entity.Siparis>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Siparis</h4>
+    <hr />
+    <dl class="row">
+        @foreach(var item in Model.Item1)
+        {
+            <dt class="col-sm-2">
+                <span>Menü Adı</span>
+            </dt>
+            <dd class="col-sm-10">
+                <span>@item.Menu.MenuAdi</span>
+            </dd>
+            <dt class="col-sm-2">
+                <span>Menü Fiyatı</span>
+            </dt>
+            <dd class="col-sm-10">
+                <span>@item.Menu.MenuFiyati</span>
+            </dd>
+            <dt class="col-sm-2">
+                <span>Sipariş Boyutu</span>
+            </dt>
+            <dd class="col-sm-10">
+                <span>@item.boyut</span>
+            </dd>
+            <dt class="col-sm-2">
+                <span>Sipariş Miktarı</span>
+            </dt>
+            <dd class="col-sm-10">
+                <span>@item.Miktar</span>
+            </dd>
+            <dt class="col-sm-2">
+                <span>Sipariş Ara Toplam Fiyat</span>
+            </dt>
+            <dd class="col-sm-10">
+                <span>@item.AraToplamFiyat</span>
+            </dd>
+            <br />
+            <br />  
+        }
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(Model=> Model.Item2.SiparisToplamTutar)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(Model => Model.Item2.SiparisToplamTutar)
+        </dd>
+        <dt class = "col-sm-2">
+            <span>Sipariş Onaylandı Mı?</span>
+        </dt>
+        <dd class = "col-sm-10">
+                @Html.DisplayFor(Model => Model.Item2.SiparisOnayliMi)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(Model => Model.Item2.Aciklama)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(Model => Model.Item2.Aciklama)
+        </dd>
+    </dl>
+</div>
+@if (Model.Item2.SiparisOnayliMi == false)
+{
+    <form asp-action="SiparisiOnayla" asp-route-id=@Model.Item2.Id
+    method="post">
+        <div class="form-control">
+            <input type="submit" value="Siparişi Onayla" class="btn btn-success"></input>
+        </div>
+    </form>
+}
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Item2.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

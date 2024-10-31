@@ -17,4 +17,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Views\Shared\Components\SepetUrun\" />
+    <Folder Include="wwwroot\image\" />
+  </ItemGroup>
+
 </Project>

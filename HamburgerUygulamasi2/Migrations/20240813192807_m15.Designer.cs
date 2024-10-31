@@ -4,6 +4,7 @@ using HamburgerUygulamasi2.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HamburgerUygulamasi2.Migrations
 {
     [DbContext(typeof(HamburgerUygulamasiContext))]
-    partial class HamburgerUygulamasiContextModelSnapshot : ModelSnapshot
+    [Migration("20240813192807_m15")]
+    partial class m15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,6 +190,9 @@ namespace HamburgerUygulamasi2.Migrations
                     b.Property<double>("AraToplamFiyat")
                         .HasColumnType("float");
 
+                    b.Property<int?>("EkstraMalzemeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("MenuId")
                         .HasColumnType("int");
 
@@ -206,35 +212,6 @@ namespace HamburgerUygulamasi2.Migrations
                     b.HasIndex("SiparisId");
 
                     b.ToTable("SepetUrun");
-                });
-
-            modelBuilder.Entity("HamburgerUygulamasi2.Entity.SepetUrunMalzeme", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EkstraMalzemeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SepetUrunId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EkstraMalzemeId");
-
-                    b.HasIndex("SepetUrunId");
-
-                    b.ToTable("SepetUrunMalzemeler");
                 });
 
             modelBuilder.Entity("HamburgerUygulamasi2.Entity.Siparis", b =>
@@ -459,25 +436,6 @@ namespace HamburgerUygulamasi2.Migrations
                     b.Navigation("Menu");
 
                     b.Navigation("Siparis");
-                });
-
-            modelBuilder.Entity("HamburgerUygulamasi2.Entity.SepetUrunMalzeme", b =>
-                {
-                    b.HasOne("HamburgerUygulamasi2.Entity.EkstraMalzeme", "EkstraMalzeme")
-                        .WithMany()
-                        .HasForeignKey("EkstraMalzemeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HamburgerUygulamasi2.Entity.SepetUrun", "SepetUrun")
-                        .WithMany()
-                        .HasForeignKey("SepetUrunId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EkstraMalzeme");
-
-                    b.Navigation("SepetUrun");
                 });
 
             modelBuilder.Entity("HamburgerUygulamasi2.Entity.Siparis", b =>

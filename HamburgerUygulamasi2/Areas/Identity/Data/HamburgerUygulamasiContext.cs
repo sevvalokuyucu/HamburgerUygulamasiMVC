@@ -1,8 +1,12 @@
-﻿using HamburgerUygulaması.Entity;
-using HamburgerUygulamasi2.Areas.Identity.Data;
+﻿using HamburgerUygulamasi2.Areas.Identity.Data;
+using HamburgerUygulamasi2.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using HamburgerUygulamasi2.Models;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
+
 
 namespace HamburgerUygulamasi2.Areas.Identity.Data;
 
@@ -13,11 +17,12 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
     {
     }
 
+    public DbSet<SepetUrun> SepetUrun { get; set; }
     public DbSet<Siparis> Siparis { get; set; }
-    public DbSet<SiparisMalzeme> SiparisMalzeme { get; set; }
-    public DbSet<SiparisMenu> SiparisMenu  { get; set; }
     public DbSet<Menu> Menu { get; set; }
     public DbSet<EkstraMalzeme> EkstraMalzeme { get; set; }
+    public DbSet<Malzeme> Malzeme { get; set; }
+    public DbSet<SepetUrunMalzeme> SepetUrunMalzemeler { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -25,7 +30,9 @@ public class HamburgerUygulamasiContext : IdentityDbContext<User>
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
-    }
+
+    } 
 }
+
     
 

@@ -1,0 +1,51 @@
+﻿@model HamburgerUygulamasi2.Entity.SepetUrun
+
+@{
+    ViewData["Title"] = "SepeteEkle";
+}
+
+<h1>SepeteEkle</h1>
+
+<h4>SepetUrun</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SepeteEkle" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label class="control-label">Menu Adı</label>
+                <label class="control-label">@Model.Menu.MenuAdi</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Menu Fiyatı</label>
+                <label class="control-label">@Model.Menu.MenuFiyati</label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Miktar" class="control-label"></label>
+                <input asp-for="Miktar" class="form-control" />
+                <span asp-validation-for="Miktar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="boyut" class="control-label"></label>
+                <select asp-for="boyut" asp-items="@(new SelectList(@ViewBag.Boyutlar,"Value", "Text"))" class="form-control"></select>
+                <span asp-validation-for="boyut" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="MenuId" />
+            <input type="hidden" asp-for="Menu" />
+            <div class="form-group">
+                <label asp-for="ekstraMalzemeler" class="control-label"></label>
+                <select asp-for="ekstraMalzemeler" name="secilenMalzemeler[]" asp-items="@(new SelectList(@ViewData["ekstraMalzemeler"] as List<HamburgerUygulamasi2.Entity.EkstraMalzeme>,"Id", "MalzemeAdi"))" class="form-control" multiple></select>
+                <span asp-validation-for="boyut" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sepete Ekle" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

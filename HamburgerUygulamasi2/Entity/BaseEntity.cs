@@ -1,4 +1,4 @@
-﻿namespace HamburgerUygulaması.Entity
+﻿namespace HamburgerUygulamasi2.Entity
 {
     public class BaseEntity
     {

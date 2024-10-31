@@ -1,11 +1,14 @@
 ﻿using System.Reflection.PortableExecutable;
 
-namespace HamburgerUygulaması.Entity
+namespace HamburgerUygulamasi2.Entity
 {
-    public class EkstraMalzeme : BaseEntity
+    public class EkstraMalzeme 
     {
+        public int Id { get; set; }
         public string MalzemeAdi { get; set; }
         public double MalzemeFiyati { get; set; }
-        public List<SiparisMalzeme> SiparisMalzeme { get; set; }
+
+        public List<SepetUrun>? sepetUruns { get; set; }
+
     }
 }

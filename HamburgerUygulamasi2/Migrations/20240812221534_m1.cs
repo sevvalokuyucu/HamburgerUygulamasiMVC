@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HamburgerUygulamasi2.Migrations
 {
     /// <inheritdoc />
-    public partial class ilk : Migration
+    public partial class m1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,8 +30,8 @@ namespace HamburgerUygulamasi2.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Ad = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Soyad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -50,6 +50,22 @@ namespace HamburgerUygulamasi2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Menu",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MenuAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MenuFiyati = table.Column<double>(type: "float", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menu", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,8 +180,10 @@ namespace HamburgerUygulamasi2.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SiparisAdedi = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SiparisToplamTutar = table.Column<double>(type: "float", nullable: false),
+                    OnayliSiparisVarMi = table.Column<bool>(type: "bit", nullable: false),
+                    Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -181,6 +199,36 @@ namespace HamburgerUygulamasi2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SepetUrun",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MenuId = table.Column<int>(type: "int", nullable: false),
+                    Miktar = table.Column<int>(type: "int", nullable: false),
+                    boyut = table.Column<int>(type: "int", nullable: false),
+                    SiparisId = table.Column<int>(type: "int", nullable: false),
+                    AraToplamFiyat = table.Column<double>(type: "float", nullable: false),
+                    EkstraMalzemeId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SepetUrun", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SepetUrun_Menu_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menu",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SepetUrun_Siparis_SiparisId",
+                        column: x => x.SiparisId,
+                        principalTable: "Siparis",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EkstraMalzeme",
                 columns: table => new
                 {
@@ -188,7 +236,7 @@ namespace HamburgerUygulamasi2.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MalzemeAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MalzemeFiyati = table.Column<double>(type: "float", nullable: false),
-                    SiparisId = table.Column<int>(type: "int", nullable: true),
+                    SepetUrunId = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -196,88 +244,10 @@ namespace HamburgerUygulamasi2.Migrations
                 {
                     table.PrimaryKey("PK_EkstraMalzeme", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EkstraMalzeme_Siparis_SiparisId",
-                        column: x => x.SiparisId,
-                        principalTable: "Siparis",
+                        name: "FK_EkstraMalzeme_SepetUrun_SepetUrunId",
+                        column: x => x.SepetUrunId,
+                        principalTable: "SepetUrun",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Menu",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MenuAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MenuFiyati = table.Column<double>(type: "float", nullable: false),
-                    SiparisId = table.Column<int>(type: "int", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Menu", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Menu_Siparis_SiparisId",
-                        column: x => x.SiparisId,
-                        principalTable: "Siparis",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SiparisMalzeme",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SiparisId = table.Column<int>(type: "int", nullable: false),
-                    EkstraMalzemeId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SiparisMalzeme", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SiparisMalzeme_EkstraMalzeme_EkstraMalzemeId",
-                        column: x => x.EkstraMalzemeId,
-                        principalTable: "EkstraMalzeme",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SiparisMalzeme_Siparis_SiparisId",
-                        column: x => x.SiparisId,
-                        principalTable: "Siparis",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SiparisMenu",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MenuId = table.Column<int>(type: "int", nullable: false),
-                    SiparisId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SiparisMenu", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SiparisMenu_Menu_MenuId",
-                        column: x => x.MenuId,
-                        principalTable: "Menu",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SiparisMenu_Siparis_SiparisId",
-                        column: x => x.SiparisId,
-                        principalTable: "Siparis",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -320,39 +290,24 @@ namespace HamburgerUygulamasi2.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EkstraMalzeme_SiparisId",
+                name: "IX_EkstraMalzeme_SepetUrunId",
                 table: "EkstraMalzeme",
-                column: "SiparisId");
+                column: "SepetUrunId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Menu_SiparisId",
-                table: "Menu",
+                name: "IX_SepetUrun_MenuId",
+                table: "SepetUrun",
+                column: "MenuId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SepetUrun_SiparisId",
+                table: "SepetUrun",
                 column: "SiparisId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Siparis_UserId",
                 table: "Siparis",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SiparisMalzeme_EkstraMalzemeId",
-                table: "SiparisMalzeme",
-                column: "EkstraMalzemeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SiparisMalzeme_SiparisId",
-                table: "SiparisMalzeme",
-                column: "SiparisId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SiparisMenu_MenuId",
-                table: "SiparisMenu",
-                column: "MenuId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SiparisMenu_SiparisId",
-                table: "SiparisMenu",
-                column: "SiparisId");
         }
 
         /// <inheritdoc />
@@ -374,16 +329,13 @@ namespace HamburgerUygulamasi2.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "SiparisMalzeme");
-
-            migrationBuilder.DropTable(
-                name: "SiparisMenu");
+                name: "EkstraMalzeme");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "EkstraMalzeme");
+                name: "SepetUrun");
 
             migrationBuilder.DropTable(
                 name: "Menu");
