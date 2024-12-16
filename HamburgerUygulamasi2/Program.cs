@@ -5,7 +5,6 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("HamburgerUygulamasiContextConnection") ?? throw new InvalidOperationException("Connection string 'HamburgerUygulamasiContextConnection' not found.");
 
-
 builder.Services.AddDbContext<HamburgerUygulamasiContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<HamburgerUygulamasiContext>();
